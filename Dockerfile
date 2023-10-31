@@ -6,3 +6,5 @@ COPY . .
 # sudo VOLUME /mnt/c/Users/cgsrj/trab-comp/trabalho-de-compiladores
 
 RUN ls -la /
+
+# RUN R --slave --no-restore --no-save
