@@ -35,4 +35,8 @@ data_filtered <- data_filtered[, !names(data_filtered) %in% empty_columns]
 
 
 # Remove rows with blank values in the "title" or "abstract" columns
-# data <- data[!(data$Title == "" | data$Abstract == "" | data$Country..Author.1. == "" | data$ == ""), ]
+data_filtered <- data_filtered[!(data_filtered$Title == "" | data_filtered$Abstract == "" | data_filtered$Country..Author.1. == ""), ]
+
+
+#Saving Files
+write.table(data_filtered,file="D:/metadata-article-ml/dataset/BD_RITA01.csv",quote = F,row.names = F,sep=";")
