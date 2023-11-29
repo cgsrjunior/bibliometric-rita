@@ -33,9 +33,23 @@ data_filtered <- data_filtered[, !names(data_filtered) %in% biostatement_columns
 data_filtered <- data_filtered[, !names(data_filtered) %in% empty_columns]
 
 
+#Identify columns to apply separators removal
+affiliation_columns <- grep("Affiliation", names(data_filtered), value = TRUE)
 
 # Remove rows with blank values in the "title" or "abstract" columns
 data_filtered <- data_filtered[!(data_filtered$Title == "" | data_filtered$Abstract == "" | data_filtered$Country..Author.1. == ""), ]
+
+#Remove separators from the abstract
+data_filtered$Abstract=str_remove_all(data_filtered$Abstract,"\n")
+data_filtered$Abstract=str_remove_all(data_filtered$Abstract,";")
+data_filtered$Abstract=str_remove_all(data_filtered$Abstract,"|")
+data_filtered$Abstract=str_remove_all(data_filtered$Abstract,"\r")
+
+
+#Way to apply this to a group of columns
+for (col in affiliation_columns) {
+  data_filtered[[col]] <- gsub("[\r\n|;]", "", data_filtered[[col]])
+}
 
 
 #Saving Files
