@@ -1,7 +1,21 @@
+#*******************************************************************************
+#* Disclaimer: this code is an modified version of the following code cited below
+#* 
+#*    Title: Bibliometric analysis of published research in Revista
+#*           de Informática Teórica e Aplicada (RITA) from 2008 to 2021
+#*    Author: M Villalobos-Cid
+#*    Date: 2023
+#*    Code version: 1.0
+#*    Availability: https://rpubs.com/mvillalobos/Rita
+#*
+#*******************************************************************************
+
+
 library("stringr")
 library("rvest")      #Contiene las funciones para webscraping
 
-datos=read.csv("D://metadata-article-ml/dataset/BD_RITA02.csv",sep=",",header=T)
+#datos=read.csv("D://metadata-article-ml/dataset/BD_RITA02.csv",sep=",",header=T)
+datos=read.csv("C://Users/ntu_c/metadata-article-ml/dataset/RITA02_NEW.csv",sep=",",header=T)
 
 #Sólo considerará los artículos publicados debido a que los datos de los artículos
 #en revisión no están en la web
@@ -15,11 +29,6 @@ for (a in idx)
   contador=contador+1 
   print(paste("Procesando",a,"Iteração:",contador,"de",length(idx),sep=" "))
   
-  
-  #if (contador == 306 || contador == 312 || ){
-  #  url=paste("https://seer.ufrgs.br/index.php/rita/article/view/125288")
-  #}
-  #else{ url=paste("http://dx.doi.org/",datos$DOI[a],sep="") }
   str_index = toString(a)
   
   url <- switch(str_index, 
@@ -33,11 +42,6 @@ for (a in idx)
                 paste("http://dx.doi.org/",datos$DOI[a],sep=""))
   
   documento=read_html(url)
-  
-  #listado=sort(documento %>% 
-  #               html_nodes("*") %>% 
-  #               html_attr("class") %>% 
-  #               unique())
   
   #autores
   autores=html_attr(html_nodes(documento, "meta[name=citation_author]"),'content')
@@ -63,8 +67,9 @@ for (a in idx)
   ano=datos$Date.submitted[a]
   ano=substring(ano,0,4) #Slice the date format YYYY-MM-DD to get year
   
-  salida=rbind (salida,data.frame(authors=autores,
+  salida=rbind (salida,data.frame(doc=datos$Submission.ID[a],authors=autores,
                                  institution=universidades,pages=num_paginas,year=ano,date=datos$Date.submitted[a]))
 }
 
-write.table(salida,"D://metadata-article-ml/dataset/BD_RITA03.csv",sep=";",row.names=F,quote = F)
+#write.table(salida,"D://metadata-article-ml/dataset/BD_RITA03.csv",sep=";",row.names=F,quote = F)
+write.table(salida,"C://Users/ntu_c/metadata-article-ml/dataset/BD_RITA03.csv",sep=";",row.names=F,quote = F)
