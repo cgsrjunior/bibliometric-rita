@@ -28,4 +28,4 @@ names(datos3)[names(datos3) == "Brazil"] <- "country"
 # datos3$latitud[is.na(datos3$latitud)] <- "-"
 # datos3$longitud[is.na(datos3$longitud)] <- "-"
 
-write.table(datos3,"C://Users/ntu_c/metadata-article-ml/dataset/BD_RITA05.csv",sep=";",row.names=F,quote = F)
+write.table(datos3,"/dataset/BD_RITA05.csv",sep=";",row.names=F,quote = F)

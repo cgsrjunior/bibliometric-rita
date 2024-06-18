@@ -11,16 +11,18 @@
 #*******************************************************************************
 
 library("stringr")    #Contiene las funciones para manejo de cadenas de texto
+library("stringdist")
+library("parallel")
 
 # Lectura de datos originales
-data=read.csv("C://Users/ntu_c/metadata-article-ml/dataset/BD_17_11_2023.csv",sep=",",header=T, row.names = NULL)
+data=read.csv("/cloud/project/dataset/BD_17_11_2023.csv",sep=",",header=T, row.names = NULL)
 
 #Fix header names error
 
 #Let's using a copy for comparison purposes
 data_filtered = data
 
-# Remover campos vacíos o incompletos\
+# Remover campos vacíos o incompletos
 # Get column names that contain the substring desired to remove
 # Identify columns with all missing values
 id_columns <- grep("ORCID", names(data_filtered), value = TRUE)
@@ -59,6 +61,50 @@ data_filtered$Abstract=str_remove_all(data_filtered$Abstract,";")
 data_filtered$Abstract=str_remove_all(data_filtered$Abstract,"|")
 data_filtered$Abstract=str_remove_all(data_filtered$Abstract,"\r")
 
+colunas = NULL
+
+#Laço para remover separadores de todos os campos relacionados a Affiliation Author
+for (i in 1:25) {
+  # Construa o nome do campo
+  field_name <- paste0("Affiliation..Author.", i, ".")
+  
+  # Aplique o comando completo para remover "\n" de cada campo correspondente
+  data_filtered[[field_name]] <- str_remove_all(data_filtered[[field_name]], "\n")
+  data_filtered[[field_name]] <- str_remove_all(data_filtered[[field_name]], ";")
+  data_filtered[[field_name]] <- str_remove_all(data_filtered[[field_name]], "|")
+  data_filtered[[field_name]] <- str_remove_all(data_filtered[[field_name]], "\r")
+  
+  #data_filtered[[field_name]] <- padronizar_nomes(data_filtered[[field_name]])
+  #if(is.null(colunas))
+  #  colunas = c(field_name)
+  #else
+  #  colunas = c(colunas, field_name)
+}
+
+#Remove separators from the Type
+data_filtered$Type=str_remove_all(data_filtered$Type,"\n")
+data_filtered$Type=str_remove_all(data_filtered$Type,";")
+data_filtered$Type=str_remove_all(data_filtered$Type,"|")
+data_filtered$Type=str_remove_all(data_filtered$Type,"\r")
+
+#Remove separators from the Disciplines
+data_filtered$Disciplines=str_remove_all(data_filtered$Disciplines,"\n")
+data_filtered$Disciplines=str_remove_all(data_filtered$Disciplines,";")
+data_filtered$Disciplines=str_remove_all(data_filtered$Disciplines,"|")
+data_filtered$Disciplines.=str_remove_all(data_filtered$Disciplines,"\r")
+
+
+#Remove separators from the Keywords
+data_filtered$Keywords=str_remove_all(data_filtered$Keywords,"\n")
+data_filtered$Keywords=str_remove_all(data_filtered$Keywords,";")
+data_filtered$Keywords=str_remove_all(data_filtered$Keywords,"|")
+data_filtered$Keywords=str_remove_all(data_filtered$Keywords,"\r")
+
+#Remove separators from the Supporting Agencies
+data_filtered$Supporting.Agencies=str_remove_all(data_filtered$Supporting.Agencies,"\n")
+data_filtered$Supporting.Agencies=str_remove_all(data_filtered$Supporting.Agencies,";")
+data_filtered$Supporting.Agencies=str_remove_all(data_filtered$Supporting.Agencies,"|")
+data_filtered$Supporting.Agencies=str_remove_all(data_filtered$Supporting.Agencies,"\r")
 
 #Way to apply this to a group of columns
 for (col in affiliation_columns) {
@@ -67,4 +113,4 @@ for (col in affiliation_columns) {
 
 
 #Saving Files
-write.table(data_filtered,file="C://Users/ntu_c/metadata-article-ml/dataset/BD_RITA01_new.csv",quote = F,row.names = F,sep=";")
+write.table(data_filtered,file="/cloud/project/dataset/BD_RITA01.csv",quote = F,row.names = F,sep=";")

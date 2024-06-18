@@ -13,16 +13,19 @@
 
 library("stringr")
 library("rvest")      #Contiene las funciones para webscraping
+library("dplyr")
 
-#datos=read.csv("D://metadata-article-ml/dataset/BD_RITA02.csv",sep=",",header=T)
-datos=read.csv("C://Users/ntu_c/metadata-article-ml/dataset/RITA02_NEW.csv",sep=",",header=T)
+datos=read.csv("/cloud/project/dataset/BD_RITA02.csv",sep=",",header=T)
 
 #Sólo considerará los artículos publicados debido a que los datos de los artículos
 #en revisión no están en la web
 
 idx=which(datos$Status=="Published")
 salida=NULL
+salida_rechazados=NULL
 contador=0
+
+print("Inicia a processo del datos publicados")
 
 for (a in idx)
 {
@@ -67,9 +70,21 @@ for (a in idx)
   ano=datos$Date.submitted[a]
   ano=substring(ano,0,4) #Slice the date format YYYY-MM-DD to get year
   
-  salida=rbind (salida,data.frame(doc=datos$Submission.ID[a],authors=autores,
-                                 institution=universidades,pages=num_paginas,year=ano,date=datos$Date.submitted[a]))
+  idioma=datos$Language[a]
+  
+  status=datos$Status[a]
+  
+  salida=rbind (salida,data.frame(doc=datos$Submission.ID[a],
+                                  authors=autores,
+                                  title=datos$Title[a],
+                                  abstract=datos$Abstract.EN[a],
+                                  keywords=datos$Keywords.EN[a],
+                                  institution=universidades,
+                                  language=idioma, 
+                                  status_article=status,
+                                  pages=num_paginas,
+                                  year=ano,
+                                  date=datos$Date.submitted[a]))
 }
 
-#write.table(salida,"D://metadata-article-ml/dataset/BD_RITA03.csv",sep=";",row.names=F,quote = F)
-write.table(salida,"C://Users/ntu_c/metadata-article-ml/dataset/BD_RITA03.csv",sep=";",row.names=F,quote = F)
+write.table(salida,"/cloud/project/dataset/BD_RITA03.csv",sep=";",row.names=F,quote = F)

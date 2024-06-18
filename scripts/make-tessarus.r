@@ -12,9 +12,9 @@ printParameters <- function(v_line, v_column, v_word, v_current_path, v_result_d
   print("\n")
 }
 
-
 # Lectura de datos originales
-data_frame=read.table("C://Users/ntu_c/metadata-article-ml/dataset/ieee-taxonomy.txt",sep="\t",header=F)
+file_path <- "/cloud/project/dataset/ieee-taxonomy-formated.csv"
+data_frame <- read.csv(file_path, stringsAsFactors = FALSE)
 
 column_names <- c("Col1", "Col2", "Col3", "Col4", "Col5", "Col6")
 dict_names <- c("Term1", "Term2", "Term3", "Term4", "Term5", "Term6")
@@ -39,12 +39,18 @@ column=1
 
 for (i in 1:nrow(data_frame)){
   word = data_frame[i, ]
+  
+  if(word == ".   Musical instrument digital interfaces"){
+    print("Start debug")
+  }
+  
   # Check if the character "world" is contained in the variable
   if ((substr(word, 1, 1) == ".")) {
     
     # Need to remove the dot to not interfere in the space count
     # Remove the first character
     word = substring(word, 2)
+    
     
     # Need to acumulate a path and swap some positions where necessary
     # Count the number of spaces at the beginning of the string
@@ -75,8 +81,6 @@ for (i in 1:nrow(data_frame)){
     # Need to clean the spaces and sp chars on the left of the sentence
     # Remove spaces and special characters before the first letter
     word = gsub("^[^A-Za-z0-9]*", "", word)
-    
-    
     
     if(num_spaces == column){
       
@@ -116,6 +120,7 @@ for (i in 1:nrow(data_frame)){
         result_dict = rbind(result_dict, current_path)
 
       }
+      
     }
     
     
@@ -131,4 +136,4 @@ for (i in 1:nrow(data_frame)){
 }
 
 #result_dict = result_dict[-1,]
-write.table(result_dict,"C://Users/ntu_c/metadata-article-ml/dataset/IEEE_tesauro.csv",sep=";",row.names=F,quote = F)
+write.table(result_dict,"/cloud/project/dataset/IEEE_tesauro.csv",sep=";",row.names=F,quote = F)

@@ -10,19 +10,23 @@
 #*
 #*******************************************************************************
 
-datos=read.csv("C://Users/ntu_c/metadata-article-ml/dataset/BD_RITA03.csv",sep=";",header=T)
+datos=read.csv("/cloud/project/dataset/BD_RITA05.csv",sep=",",header=T)
+
+#Using distinct ID to gather only the absolute number of visualization each year
+datos_tmp = distinct(datos, doc, title, .keep_all = TRUE)
 
 #datos complementarios
-datos_comp=read.csv("C://Users/ntu_c/metadata-article-ml/dataset/views-20231205.csv",sep=",",header=T)
+datos_comp=read.csv("/cloud/project/dataset/views-20231205.csv",sep=",",header=T)
 
-datos=merge(datos,datos_comp[,c("Article.ID","Total.Galley.Views")],by.x = "doc",by.y="Article.ID",all = T)
+
+datos=merge(datos_tmp,datos_comp[,c("Article.ID","Total.Galley.Views")],by.x = "doc",by.y="Article.ID",all = T)
 
 names(datos)[1]="doc"
-names(datos)[7]="Views"
+names(datos)[13]="Views"
 
 #Corregir un dato erróneo
 datos$Views[which(is.na(datos$Views))]="none"
 
-
 #Guardar
-write.table(datos,"C://Users/ntu_c/metadata-article-ml/dataset/BD_RITA04.csv",sep=";",row.names=F,quote = F)
+datos = datos[complete.cases(datos), ]
+write.table(datos,"/cloud/project/dataset/BD_RITA_DISTINCT_ACCEPTED.csv",sep=";",row.names=F,quote = F)
