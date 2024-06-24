@@ -1,11 +1,12 @@
 library("ggplot2") #Gráficos
 library("plotly")  #Gráficos
 library("dplyr")   #Ordenamiento de datos
+library(knitr)
 library(lubridate)
 
 
 # Remember to change this for the next 
-datos = read.csv("/cloud/project/dataset/BD_RITA02.csv",sep=",",header=T)
+datos = read.csv("C:/Users/ntu_c/metadata-article-ml/dataset/BD_RITA02.csv",sep=",",header=T)
 
 paleta = "Reds" #"Blues" "Zissou" "GrandBudapest"
 
@@ -17,7 +18,7 @@ b1=T
 #Review
 b2=F
 #Rechazados
-b3=F
+b3=T
 #Submission
 b4=F
 #Copyediting
@@ -57,3 +58,19 @@ g=ggplot(data=datos_tmp, aes(x=Years, y=n.., fill=Status)) +
 
 
 ggplotly(g)
+
+
+# Agrupar por ano e somar os counts
+datos_tmp <- datos_tmp %>%
+  group_by(Years) %>%
+  summarise(
+    Total_de_artigos = sum(n..),
+    n_published = sum(ifelse(Status == "Published", n.., 0)),
+    n_declined = sum(ifelse(Status == "Declined", n.., 0))
+  )
+
+# Renomear colunas se necessário
+colnames(datos_tmp) <- c("Year", "Total articles", "Published", "Declined")
+
+# Gerar tabela Markdown com os top 10 areas mais vistas
+table_ranked_area <- kable(datos_tmp, caption = "Number of articles each year", align = "c", row.names = FALSE)

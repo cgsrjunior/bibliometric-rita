@@ -79,7 +79,7 @@ dfmat_acceptos_the = dfm(toks_acceptos_the)
 #=========================================================================================================
 
 # Defina o ano de interesse
-ano <- "2008"
+ano <- "2023"
 
 # Filtrar documentos por ano
 dfmat_acceptos_the_year <- dfm_subset(dfmat_acceptos_the, docvars(dfmat_acceptos_the, "year") == ano)
@@ -168,3 +168,5 @@ print(tstat_key_year)
 
 grafico_areas=textplot_keyness(tstat_key_year,labelsize = 4,n=10,margin = 0.6, 
                                color = c("red", "blue"))
+
+

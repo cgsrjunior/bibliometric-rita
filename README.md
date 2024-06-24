@@ -1,14 +1,25 @@
+<title># 16 Years of Rita - A bibliometric analysis</title>
+
 # 16 Years of Rita - A bibliometric analysis
 
 ## 1.Introduction
 
-Rita is an brazilian scientific magazine that surges in 1989 with the mission to have a regular and strong computer science publication in the Informatics Institute - UFRGS. Since them, lots of changes have in article publication and RITA follows most of it into the academic community. With a digital format of publication since 2008, we have 16 years of article knowledge stored in our database and we want to make an exploratory analysis:
+Rita is an brazilian scientific magazine that surges in 1989 with the mission to have a regular and strong computer science publication in the Informatics Institute - UFRGS. Since them, lots of changes have in article publication and RITA continues to carry his legacy across time. With a digital format of publication since 2008, having 16 years of article knowledge stored in database, creates a perfect opportunity to make an exploratory analysis to observe many different aspects of computer science publication inside the magazine.
 
-    * the subject of publications that we did have here (and the variations on that across time)
-    * indexes of publications related to institutions and authors
-    * the volume of publications that occurs from 2008 to 2023
-    * the contributions between authors across the globe
-    
+
+In this study we try to answer the following questions:
+
+* How the number of publications evolve across 15 years of existence and Which years had the highest and lowest number of publications?
+* How do different bibliometric indexers vary in assessing the quality and impact of scientific publications in the journal over the last 15 years?
+* Which subjects have more views across 15 years?
+* Which articles have most views?
+* Which authors and institutions have the highest number of published articles?
+* What is the variation of the topics published in our magazine?
+* What is the geographical distribution of the authors of the articles published in the journal?
+* What is the collaboration network between authors and institutions in the journal's articles?
+* Which authors and institutions are the ones with most articles rejected?
+* How different was the keywords of the rejected articles compared to the accepted ones?
+  
 
 ## 2. Background and related work
 
@@ -36,82 +47,123 @@ Science mapping examines the relationships between research constituents (Baker,
 
 The image below gave us an overview of the metrics presented in this study:
 
-![Table with metric description (Donthu et al., 2021)](/cloud/project/rpubs-images/toolbox_metrics_overview.png)
+![Table with metric description (Donthu et al., 2021)](C:/Users/ntu_c/metadata-article-ml/rpubs-images/toolbox_metrics_overview.png)
 
-### Setup an bibliometric analysis and explain a little bit on how it works in detriment of other methods
-    * Explain the bibliometric analysis
-    * contrast with other methods
+The main goal of bibliometric analysis is to use quantitative methods so we can observe patterns presented in the database to identify tendencies, frequency, interations, anything related to authors and articles that've submit to the journal across the years.
+
+Other methods can be used to evaluate article production, such as Systematic Literature Review or Meta-Analysis. The first is used to summarize and synthesize the findings of existing literature on a research topic or field, while the other summarize the empirical evidence of relationship between variables while uncovering relationships not studied in existing studies (Donthu et al., 2021).
+
+Since the objective is to explore a large dataset of publications of many different topics and aspects of computer science, while observe the evolution of information related to articles and authors, this study opted for the usage of bibliometrical analysis
     
-### Architeture overview on how we get the results
-    * Image of overview architeture
-    * Briefly explain each step accordling
-    
-    
-# Questions to try to answer with the results
+# 3. - Pipeline architecture overview
 
-Análise Temporal:
+The following image below are the graphical representation to describe the pipeline defined in this proccess:
+![Pipeline for processing RITA dataset](C:/Users/ntu_c/metadata-article-ml/rpubs-images/Diagrama_TCC_RITA.png)
 
-    Como evoluiu o número de publicações na revista ao longo dos 15 anos?
-    Quais anos tiveram o maior e o menor número de publicações?
+A briefly overview of each step:
 
-Temas e Tópicos de Pesquisa:
+1. The extraction of dataset contain all the information presented in RITA are made and first we made a cleanup of all fields not used for any type of analysis and related to missing data presented in the columns
+2. We padronize the text language generating translation of abstracts to english for purposes of word frequency and analysis
+  After that we partition the dataset into two different datasets to avoid merging problems between different types of articles:
+  2.1. One dataset of published articles - to allow summarizing views and bibliometric indexes calculations
+  2.2. Another dataset of rejected articles - to explore more aspects on the side of articles that didn't have seen the light of day
+3. Run macros to padronize name of institutions and with basis on this info, locate city and country respective
+4. Using the package of nominatimlite to gather latitude and longitude based on the city where the institutions are located
+5. Merging views information with the published articles dataset
+6. Editing with Google Sheets to merge the remaining data related to title, abstract and submission date 
+7. A script was created to scrapping IEEE Tessaro and transform them into a dictionary to be used to padronize tokens into keywords and then subsequently used on the word analysis 
 
-    Quais foram os principais temas/tópicos abordados nos artigos ao longo dos 15 anos?
-    Como evoluíram os temas/tópicos de pesquisa na revista ao longo do tempo?
+# 4. - The Results
 
-Autores e Contribuições:
+### 4.1 How the number of publications evolve across 15 years of existence and Which years had the highest and lowest number of publications?
 
-    Quem são os autores mais prolíficos da revista nos últimos 15 anos?
-    Quais são as instituições mais frequentemente representadas entre os autores?
+<iframe src="C:/Users/ntu_c/metadata-article-ml/rpubs-interactive-graph/publications_year.html" width="100%" height="500"></iframe>
 
+#### Looking only for accepted and rejected results
 
-Colaborações:
+<iframe src="C:/Users/ntu_c/metadata-article-ml/rpubs-interactive-graph/pub_year_accept_declined.html" width="100%" height="500"></iframe>
 
-    Qual é a rede de colaboração entre autores nos artigos da revista?
-    Quais são os países mais representados em colaborações internacionais nos artigos?
+| Year | Total articles | Published | Declined |
+|:----:|:--------------:|:---------:|:--------:|
+| 2008 |       48       |    41     |    7     |
+| 2009 |       66       |    28     |    38    |
+| 2010 |       69       |    38     |    31    |
+| 2011 |       48       |    10     |    38    |
+| 2012 |       76       |    20     |    56    |
+| 2013 |       48       |    14     |    34    |
+| 2014 |       56       |    13     |    43    |
+| 2015 |       67       |    20     |    47    |
+| 2016 |       54       |     9     |    45    |
+| 2017 |       61       |    18     |    43    |
+| 2018 |      114       |    30     |    84    |
+| 2019 |       68       |    24     |    44    |
+| 2020 |       48       |    22     |    26    |
+| 2021 |       50       |    15     |    35    |
+| 2022 |       44       |    13     |    31    |
+| 2023 |       36       |     4     |    32    |
 
-Distribuição Geográfica:
+#### Total of articles received classified by language
 
-    Qual é a distribuição geográfica dos autores dos artigos publicados na revista?
-    Quais países tiveram um aumento ou diminuição na contribuição ao longo dos anos?
+<iframe src="C:/Users/ntu_c/metadata-article-ml/rpubs-interactive-graph/total_submissions_aggregated_language.html" width="100%" height="500"></iframe>
 
-Revistas e Impacto Relativo:
+| Year | Total articles | en_US | es_ES | pt_BR | pt_PT |
+|:----:|:--------------:|:-----:|:-----:|:-----:|:-----:|
+| 2008 |       48       |   0   |   0   |  48   |   0   |
+| 2009 |       66       |   0   |   0   |  66   |   0   |
+| 2010 |       69       |   0   |   0   |  69   |   0   |
+| 2011 |       48       |   0   |   0   |  48   |   0   |
+| 2012 |       76       |   0   |   0   |  76   |   0   |
+| 2013 |       48       |   4   |   0   |  44   |   0   |
+| 2014 |       56       |  14   |   1   |  40   |   1   |
+| 2015 |       67       |   6   |   0   |  61   |   0   |
+| 2016 |       54       |   4   |   0   |  49   |   1   |
+| 2017 |       61       |  13   |   0   |  47   |   1   |
+| 2018 |      114       |  101  |   0   |  13   |   0   |
+| 2019 |       68       |  68   |   0   |   0   |   0   |
+| 2020 |       48       |  48   |   0   |   0   |   0   |
+| 2021 |       50       |  50   |   0   |   0   |   0   |
+| 2022 |       44       |  44   |   0   |   0   |   0   |
+| 2023 |       53       |  53   |   0   |   0   |   0   |
 
-    Como o fator de impacto da revista evoluiu ao longo dos 15 anos?
-    Quais são as revistas concorrentes e como elas se comparam em termos de impacto e citações?
+Since we have a lower number of articles published related to 2023, we attained to use data until 2022 for some analysis to ensure that we have the significant large scope of dataset for each year
 
-Padrões de Publicação:
+### 4.2 How do different bibliometric indexers vary in assessing the quality and impact of scientific publications in the journal over the last 15 years?
 
-    Quais tipos de artigos (revisões, estudos empíricos, teóricos, etc.) são mais comuns na revista?
-    Houve mudanças nos tipos de artigos publicados ao longo dos anos?
+### 4.2.1 Indexers related to publications
 
-Palavras-chave e Tópicos Emergentes:
+These indicators included in (Gupta and Hasan 2018) measure the relationship between the number of authors and the number of publications.
 
-    Quais são as palavras-chave mais frequentemente utilizadas nos artigos ao longo dos 15 anos?
-    Quais são os tópicos emergentes identificados a partir da análise de palavras-chave?
+#### a. Annual Growth Rate of Publications - ARG
 
-Autores mais Citados:
+This indicator measures the percentage change in the number of articles between years (Gupta and Hasan 2018). To calculate AGR, the formula used below:
 
-    Quais autores tiveram os artigos mais citados publicados na revista?
-    Existe uma correlação entre a afiliação dos autores mais citados e o número de citações?
+\[
+ARG = (\frac{\#\text{Manuscripts_year}[a] - \#\text{Manuscripts_year}[a - 1]}{\#\text{Manuscripts_year}[a]} \times 100)
+\]
 
-Índices de Diversidade:
+#### b. Cumulative Annual Growth Rate - CAGR
 
-    Qual é a diversidade de afiliações institucionais e geográficas entre os autores?
-    Como evoluiu a diversidade de autores e afiliações ao longo do tempo?
+It corresponds to the cumulative growth rate of the number of publications over a specific period of time (Kulkanjanapiban and Silwattananusarn 2021). It is calculated as:
 
-Tempos de Submissão e Publicação:
+\[
+\text{CAGR} = \left( \frac{\#\text{Manuscripts_year}_{\text{CUM}}[a]^{\left(\frac{1}{\text{year}(a) - 1}\right)}}{\#\text{Manuscripts_year}[a]} \right) \times 100
+\]
 
-    Qual é o tempo médio de revisão e publicação dos artigos na revista?
-    Houve mudanças nos tempos de revisão e publicação ao longo dos 15 anos?
+#### c. Relative Growth Rate - RGR
 
+It corresponds to the increase in the number of articles published per unit of time (Kumar and Kaliyaperumal 2015) (Rathika and Thanuskodi 2021). The average RGR for a time interval can be calculated using:
 
-# End questions
+\[
+\text{RGR} = \frac{\ln(\#\text{Manuscripts_year}[a]) - \ln(\#\text{Manuscripts_year}[a-1])}{\text{year}(a) - \text{year}(a-1)}
+\]
 
+#### d. Doubling Time - DT
 
-# The Results
+There is a direct relationship between RGR and the time it would take for the number of publications to double. To calculate the doubling time (DT), a standard natural logarithm of 0.693 (Kumar and Kaliyaperumal 2015) is used here (Rathika and Thanuskodi 2021), applying the following equation:
 
-## Indexers related to the number of publications:
+\[
+\text{DT} = \frac{0.693}{\text{RGR}}
+\]
 
 | Years | Freq | Freq_AC |    AGR |   CARG |  RGR |    DT |
 |:------|-----:|--------:|-------:|-------:|-----:|------:|
@@ -132,7 +184,71 @@ Tempos de Submissão e Publicação:
 | 2022  |   41 |     854 |   5.13 |  24.22 | 0.05 | 12.06 |
 | 2023  |   18 |     872 | -56.10 |  29.52 | 0.02 | 30.15 |
 
-## Indexes related to the authors:
+### 4.2.2 Indexes related to the authors
+
+#### a. Author productivity - AAPP and PPAA
+
+These indicators included in (Gupta and Hasan 2018) measure the relationship between the number of authors and the number of publications.
+
+\[
+\text{AAPP} = \frac{\#\text{Authors_year[a]}}{\#\text{Manuscripts_year}[a]}
+\]
+
+\[
+\text{PPAA} = \frac{\#\text{Manuscripts_year}[a]}{\#\text{Authors_year[a]}}
+\]
+
+#### b. Degree of Collaboration - DC
+
+It is defined as the relationship between articles with more than one author (Nm) and those written by only one person (Ns) (Savanur and Srikanth 2009) (Gupta and Hasan 2018) (Barik and Jena 2019) (Das, Kaur, and Verma 2021).
+
+\[
+\text{DC} = \frac{N_{m}}{N_{m} + N_{s}}
+\]
+
+#### c. Collaborative Index - CI
+
+It is a weighted average of authors per joint article. That is, those who have more than one author (Savanur and Srikanth 2009) (Gupta and Hasan 2018) (Barik and Jena 2019) (Das, Kaur, and Verma 2021)
+
+\[
+\text{CI} = \frac{\sum_{j=1}^{A} j * f_{j}}{N}
+\]
+
+#### d. Collaborative Coefficient - CC
+
+It is a weighted average of authors per joint article. That is, those who have more than one author (Savanur and Srikanth 2009) (Gupta and Hasan 2018) (Barik and Jena 2019) (Das, Kaur, and Verma 2021).
+
+\[
+\text{CC} = 1 - \frac{\sum_{j=1}^{A} \frac{1}{j} * f_{j}}{N}
+\]
+
+Where:
+
+* j is the number of authors per article, example: 1, 2, 3, …A
+* fj is the number of articles with j authors.
+* N is the total number of articles published in that year.
+
+#### e. Modified Collaboration Coefficient - MCC
+
+This indicator is applied and described in (Das, Kaur, and Verma 2021).
+
+\[
+\text{MCC} = (\frac{N}{N-1})(\frac{\sum_{j=1}^{A} \frac{1}{j} * f_{j}}{N})
+\]
+
+Where:
+
+* j is the number of authors per article, example: 1, 2, 3, …A
+* fj is the number of articles with j authors.
+* N is the total number of articles published in that year.
+
+#### f. Average number of pages per article (PNA)
+
+Corresponds to the average number of pages per published article.
+
+\[
+\text{PNA} = \frac{\sum \text{#Number_pages}} {\text{#Manuscript_by_year}}
+\]
 
 |Years | Freq| AAPP| PPAA|   DC|   CI|   CC|  MCC|   PNA|
 |:-----|----:|----:|----:|----:|----:|----:|----:|-----:|
@@ -153,32 +269,129 @@ Tempos de Submissão e Publicação:
 |2022  |   41| 3.08| 0.32| 0.85| 3.15| 0.59| 0.64| 10.95|
 |2023  |   18| 4.25| 0.24| 1.00| 4.50| 0.77| 1.02| 12.22|
 
+### 4.2.3 Hipotesis proof for average of the indexes
 
-### Promedio de publicaciones
-### Promedio de paginas
-### Promedio de visualizações
+We realize an statistical hipotesis test to see if our sample is significant enough. All tests realized in this section was using a confidence interval of 95% and p-value of 1. The results of each average are in the images down below
+
+#### Average number of publications
+
+![T Test of publications](C:/Users/ntu_c/metadata-article-ml/rpubs-images/t-test_publications_year.png)
+![Standard Deviation](C:/Users/ntu_c/metadata-article-ml/rpubs-images/standard_deviation_publications_per_year.png)
+
+#### Average number of pages
+
+![T Test of pages](C:/Users/ntu_c/metadata-article-ml/rpubs-images/t-test_pages_publications.png)
+![Standard Deviation](C:/Users/ntu_c/metadata-article-ml/rpubs-images/standard_deviation_pages_publications.png)
+
+### 4.3 Which subjects have more views across 15 years?
+
+#### Views per year 2022
+
+![Views aggregated by Area in 2022](C:/Users/ntu_c/metadata-article-ml/rpubs-images/views_areas_2022.png)
+
+|               area               | views |
+|:--------------------------------:|:-----:|
+|             Business             | 4239  |
+|        Electric variables        | 3444  |
+|     Artificial intelligence      | 2104  |
+|         Computer science         | 1430  |
+|    Computational linguistics     |  369  |
+|            Algorithms            |  288  |
+| Materials science and technology |  267  |
+|             Circuits             |  260  |
+|             Modeling             |  260  |
+|         Medical services         |  214  |
 
 
-P.S: lembrar de colocar as instituições nas tabelas de autores
+#### Views per year 2018
+
+![Views aggregated by Area in 2018](C:/Users/ntu_c/metadata-article-ml/rpubs-images/views_areas_2018.png)
+
+|        area         | views |
+|:-------------------:|:-----:|
+|      Economics      | 64704 |
+|  Computer science   | 44143 |
+|     Industries      | 24660 |
+|      Business       | 23400 |
+|       Optics        | 19674 |
+| Electric variables  | 16364 |
+|      Modeling       | 6572  |
+| Pattern recognition | 4182  |
+|       Metals        | 3852  |
+|     Algorithms      | 3301  |
 
 
-### Autores que mais publicaram - Agregado até 2023
+#### Views per year 2013
 
-|Autores                          | Frec|
-|:--------------------------------|----:|
-|Anderson Faustino da Silva       |    6|
-|José Palazzo Moreira de Oliveira |    6|
-|Aldo von Wangenheim              |    4|
-|Eanes Torres Pereira             |    4|
-|Luciano Antonio Digiampietri     |    4|
-|Alfredo Silveira Araújo Neto     |    3|
-|Antônio Carlos Rocha Costa       |    3|
-|Gustavo Rau de Almeida Callou    |    3|
-|Ivan Torres Pisa                 |    3|
-|Jaime Simão Sichman              |    3|
+![Views aggregated by Area in 2013](C:/Users/ntu_c/metadata-article-ml/rpubs-images/views_areas_2013.png)
+
+|               area               | views |
+|:--------------------------------:|:-----:|
+|         Computer science         | 40964 |
+|        Electric variables        | 21870 |
+|            Economics             | 19008 |
+|            Industries            | 13080 |
+|    System analysis and design    | 4232  |
+|           Optimization           | 1842  |
+|             Modeling             | 1738  |
+| Materials science and technology |  872  |
+|         Image processing         |  869  |
+|            Materials             |   0   |
 
 
-### Instituiçoes que mais publicaram - Agregado até 2023
+#### Views per year 2008
+
+![Views aggregated by Area in 2008](C:/Users/ntu_c/metadata-article-ml/rpubs-images/views_areas_2008.png)
+
+|               area               | views  |
+|:--------------------------------:|:------:|
+|     Artificial intelligence      | 430288 |
+|        Electric variables        | 110438 |
+|              Robots              | 101007 |
+|        Design methodology        | 86295  |
+|            Industries            | 72905  |
+|         Computer science         | 44352  |
+| Materials science and technology | 11124  |
+|       Information systems        | 10980  |
+|             Modeling             |  9779  |
+|           Probability            |  9225  |
+
+### 4.4 Which articles have most views?
+
+#### The 10 articles with the most views
+
+|author                        |title                                                                                                                  |institution                                       | Views| year|
+|:-----------------------------|:----------------------------------------------------------------------------------------------------------------------|:-------------------------------------------------|-----:|----:|
+|André C. P. L. F. de Carvalho |Uma Introdução às Support Vector Machines                                                                              |Universidade de São Paulo - USP                   | 51663| 2008|
+|Maurício Marengoni            |Tutorial: Introdução à Visão Computacional usando OpenCV                                                               |Universidade Presbiteriana Mackenzie              | 27564| 2009|
+|Adriana Bordini               |QEDS: Um Simulador Clássico para Distinção de Elementos Quântico                                                       |Universidade Federal de Pelotas - UFPel           | 25779| 2016|
+|Lino Sanabria                 |Estudo do Padrão Avançado de Criptografia AES – Advanced Encryption Standard                                           |Universidade Federal da Grande Dourados - UFGD    | 13048| 2011|
+|Paulo Blauth Menezes          |Teorias da Aleatoriedade                                                                                               |Universidade Federal do Rio Grande do Sul - UFRGS |  9708| 2008|
+|Rafael Prikladnicki           |Um Olhar Sociotécnico sobre a Engenharia de Software                                                                   |Universidade Federal do Rio de Janeiro - UFRJ     |  9613| 2008|
+|Jacques Wainer                |Processos de Decisão de Markov: um tutorial                                                                            |Universidade Estadual de Campinas - Unicamp       |  9516| 2008|
+|Siome Klein Goldenstein       |A Gentle Introduction to Predictive Filters                                                                            |Universidade Estadual de Campinas - Unicamp       |  9225| 2008|
+|Rafael Santos                 |Java Advanced Imaging API: A Tutorial                                                                                  |Instituto de Estudos Avançados – IEAv             |  8010| 2008|
+|Heimar de Fátima Marin        |Desenvolvimento e Avaliação de um Protocolo Eletrônico para Atendimento e Monitoramento do Paciente com Doença Celíaca |Universidade Federal de São Paulo - UNIFESP       |  5946| 2010|
+
+### 4.5 Which authors and institutions have the highest number of published articles?
+
+#### Authors who published the most articles - Added until 2023
+
+|Autores                          |Institution                                       | Frec|
+|:--------------------------------|:-------------------------------------------------|----:|
+|Anderson Faustino da Silva       |Universidade Estadual de Maringá - UEM            |    6|
+|José Palazzo Moreira de Oliveira |Universidade Federal do Rio Grande do Sul - UFRGS |    6|
+|Aldo von Wangenheim              |Universidade Federal de Santa Catarina - UFSC     |    4|
+|Eanes Torres Pereira             |Universidade Federal de Campina Grande - UFCG     |    4|
+|Luciano Antonio Digiampietri     |Universidade de São Paulo - USP                   |    4|
+|Alfredo Silveira Araújo Neto     |Techway Informática Ltda                          |    3|
+|Gustavo Rau de Almeida Callou    |Universidade Federal Rural de Pernambuco - UFRPE  |    3|
+|Ivan Torres Pisa                 |Universidade Federal de São Paulo - UNIFESP       |    3|
+|Jaime Simão Sichman              |Universidade de São Paulo - USP                   |    3|
+|Judith Kelner                    |Universidade Federal de Pernambuco - UFPE         |    3|
+
+
+### Institutions that published the most articles - Added until 2023
 
 |Instituciones                                      | Frec|
 |:--------------------------------------------------|----:|
@@ -192,163 +405,96 @@ P.S: lembrar de colocar as instituições nas tabelas de autores
 |Universidade Federal de Santa Catarina - UFSC      |   24|
 |Universidade Tecnológica Federal do Paraná – UTFPR |   24|
 |Universidade Federal de Juiz de Fora - UFJF        |   22|
-
-
     
-## Question para Artigos Publicados
 
-###Como variaram os indicadores bibliométricos de publicações desde de 2008 até 2023?
+### 4.6 What is the variation of the topics published in our magazine?
 
-<iframe src="/cloud/project/rpubs-interactive-graph/publications_year.html" width="100%" height="500"></iframe>
+#### Areas and sub-areas of research observed in 2023
 
-<iframe src="/cloud/project/rpubs-interactive-graph/pub_year_accept_declined.html" width="100%" height="500"></iframe>
+![Areas of study - 2023](C:/Users/ntu_c/metadata-article-ml/rpubs-images/areas_study_2023.png)
+![Subareas of study - 2023](C:/Users/ntu_c/metadata-article-ml/rpubs-images/subareas_study_2023.png)
 
+#### Areas and sub-areas of research observed in 2018
 
+![Areas of study - 2018](C:/Users/ntu_c/metadata-article-ml/rpubs-images/areas_study_2018.png)
+![Subareas of study - 2018](C:/Users/ntu_c/metadata-article-ml/rpubs-images/subareas_study_2018.png)
 
-### Agregado de visualizações dos artigos por ano?
+#### Areas and sub-areas of research observed in 2013
 
+![Areas of study - 2013](C:/Users/ntu_c/metadata-article-ml/rpubs-images/areas_study_2013.png)
+![Subareas of study - 2013](C:/Users/ntu_c/metadata-article-ml/rpubs-images/subareas_study_2013.png)
 
+#### Areas and sub-areas of research observed in 2008
 
-<iframe src="/cloud/project/rpubs-interactive-graph/total_views_aggregated_by_year.html" width="100%" height="500"></iframe>
+![Areas of study - 2008](C:/Users/ntu_c/metadata-article-ml/rpubs-images/areas_study_2008.png)
+![Subareas of study - 2008](C:/Users/ntu_c/metadata-article-ml/rpubs-images/subareas_study_2008.png)
 
-### Top 20 artigos mais visualizados:
+### 4.7 What is the geographical distribution of the authors of the articles published in the journal?
 
+### Map with aggregated localization of authors
 
+<iframe src="C:/Users/ntu_c/metadata-article-ml/rpubs-interactive-graph/graph_total_aggregated_authors_location.html" width="100%" height="500"></iframe>
 
-|author                         |title                                                                                                                      | Views| year|
-|:------------------------------|:--------------------------------------------------------------------------------------------------------------------------|-----:|----:|
-|André C. P. L. F. de Carvalho  |Uma Introdução às Support Vector Machines                                                                                  | 51663| 2008|
-|Maurício Marengoni             |Tutorial: Introdução à Visão Computacional usando OpenCV                                                                   | 27564| 2009|
-|Adriana Bordini                |QEDS: Um Simulador Clássico para Distinção de Elementos Quântico                                                           | 25779| 2016|
-|Lino Sanabria                  |Estudo do Padrão Avançado de Criptografia AES – Advanced Encryption Standard                                               | 13048| 2011|
-|Paulo Blauth Menezes           |Teorias da Aleatoriedade                                                                                                   |  9708| 2008|
-|Rafael Prikladnicki            |Um Olhar Sociotécnico sobre a Engenharia de Software                                                                       |  9613| 2008|
-|Jacques Wainer                 |Processos de Decisão de Markov: um tutorial                                                                                |  9516| 2008|
-|Siome Klein Goldenstein        |A Gentle Introduction to Predictive Filters                                                                                |  9225| 2008|
-|Rafael Santos                  |Java Advanced Imaging API: A Tutorial                                                                                      |  8010| 2008|
-|Heimar de Fátima Marin         |Desenvolvimento e Avaliação de um Protocolo Eletrônico para Atendimento e Monitoramento do Paciente com Doença Celíaca     |  5946| 2010|
-|Alane Marie de Lima            |Formal Semantics for Java-like Languages and Research Opportunities                                                        |  5705| 2018|
-|Cássio Martini Martins Pereira |Common Dissimilarity Measures are Inappropriate for Time Series Clustering                                                 |  5103| 2011|
-|Débora Cristine Xavier         |Análise do Controle Motor com Interações usando Dispositivos Convencionais e Realidade Aumentada                           |  4449| 2009|
-|Fernando Gomes Pires           |Software para Auxílio no Processo de Elaboração do Cariótipo                                                               |  4352| 2014|
-|Abilio Parada                  |Automating mobile application development: UML-based code generation for Android and Windows Phone                         |  4309| 2015|
-|Arnaldo de Albuquerque Araújo  |Efeitos Visuais, uma Abordagem a Partir do Processamento Digital de Imagens                                                |  3814| 2009|
-|Rebeca Schroeder Freitas       |Mineração em Grandes Massas de Dados Utilizando Hadoop MapReduce e Algoritmos Bio-inspirados: Uma Revisão Sistemática      |  3731| 2015|
-|Anderson Faustino da Silva     |Prolog: A Linguagem, A Máquina Abstrata de Warren e Implementações                                                         |  3724| 2013|
-|Victor Wanderley               |Estudo e Modelagem dos Efeitos da Forma e do Crescimento em Processos de Formação de Padrões de Pelagem via Reação-Difusão |  3281| 2017|
-|Claudia Marcela Justel         |The Design of a Graphics Engine for the Development of Virtual Reality Applications                                        |  3197| 2009|
+### Authors localized in 2023
 
-
-P.s: regressão com relação de busca por tematica
-
-## Total of articles received by RITA classified by language
-
-
-<iframe src="/cloud/project/rpubs-interactive-graph/total_submissions_aggregated_language.html" width="100%" height="500"></iframe>
-
-
-P.s: analise feita apenas com base nos metadados registrados
-
-
-
-# Qual a variação dos assuntos publicados na revista ao longo dos anos?
-
-### Areas of study observed in 2023
-
-![Areas of study - 2023](/cloud/project/rpubs-images/areas_study_2023.png)
-
-### Sub-areas of study observed in 2023
-
-![Subareas of study - 2023](/cloud/project/rpubs-images/subareas_study_2023.png)
-
-
-
-### Areas of study observed in 2018
-
-![Areas of study - 2018](/cloud/project/rpubs-images/areas_study_2018.png)
-
-### Sub-areas of study observed in 2018
-
-![Subareas of study - 2018](/cloud/project/rpubs-images/subareas_study_2018.png)
-
-
-
-### Areas of study observed in 2013
-
-![Areas of study - 2013](/cloud/project/rpubs-images/areas_study_2013.png)
-
-### Sub-areas of study observed in 2013
-
-![Subareas of study - 2013](/cloud/project/rpubs-images/subareas_study_2013.png)
-
-
-
-### Areas of study observed in 2008
-
-![Areas of study - 2008](/cloud/project/rpubs-images/areas_study_2008.png)
-
-### Sub-areas of study observed in 2008
-
-![Subareas of study - 2008](/cloud/project/rpubs-images/subareas_study_2008.png)
-
-
-
-# Grafos de localidade entre autores:
-
-
-### Map with aggregated locations of authors
-
-
-<iframe src="/cloud/project/rpubs-interactive-graph/graph_total_aggregated_authors_location.html" width="100%" height="500"></iframe>
-
-
-
-### Total authors location in 2023
-
-
-<iframe src="/cloud/project/rpubs-interactive-graph/graph_authors_location_2023.html" width="100%" height="500"></iframe>
-
+<iframe src="C:/Users/ntu_c/metadata-article-ml/rpubs-interactive-graph/graph_authors_location_2023.html" width="100%" height="500"></iframe>
 
 ### Total authors location in 2018
 
-
-<iframe src="/cloud/project/rpubs-interactive-graph/graph_authors_location_2018.html" width="100%" height="500"></iframe>
-
+<iframe src="C:/Users/ntu_c/metadata-article-ml/rpubs-interactive-graph/graph_authors_location_2018.html" width="100%" height="500"></iframe>
 
 ### Total authors location in 2013
 
-
-<iframe src="/cloud/project/rpubs-interactive-graph/graph_authors_location_2013.html" width="100%" height="500"></iframe>
-
+<iframe src="C:/Users/ntu_c/metadata-article-ml/rpubs-interactive-graph/graph_authors_location_2013.html" width="100%" height="500"></iframe>
 
 ### Total authors location in 2008
 
+<iframe src="C:/Users/ntu_c/metadata-article-ml/rpubs-interactive-graph/graph_authors_location_2008.html" width="100%" height="500"></iframe>
 
-<iframe src="/cloud/project/rpubs-interactive-graph/graph_authors_location_2008.html" width="100%" height="500"></iframe>
+### 4.8 What is the collaboration network between authors and institutions in the journal's articles?
 
+#### Aggregated connections of institutions across 15 years of RITA
 
+<iframe src="C:/Users/ntu_c/metadata-article-ml/rpubs-interactive-graph/total_aggregated_institutions_connections.html" width="100%" height="500"></iframe>
 
-# Question para Artigos Rejeitados
+#### Relations between authors and institutions in 2008
 
-## Quais são as instituições e autores com o maior numero de artigos rejeitados?
+<iframe src="C:/Users/ntu_c/metadata-article-ml/rpubs-interactive-graph/total_authors_connections_2008.html" width="100%" height="500"></iframe>
+<iframe src="C:/Users/ntu_c/metadata-article-ml/rpubs-interactive-graph/total_institution_connections_2008.html" width="100%" height="500"></iframe>
 
-### Autores
+#### Relations between authors and institutions in 2013
 
-|Autores                             | Frec|
-|:-----------------------------------|----:|
-|Mário   Leite                       |    6|
-|Flávia Gonçalves   Fernandes        |    5|
-|Carla Diacui Medeiros   Berkenbrock |    3|
-|Diogo Fernando   Trevisan           |    3|
-|José dos Santos   Machado           |    3|
-|Mohanad                             |    3|
-|Naidson Clayr   Santos Ferreira     |    3|
-|Rodrigo Duarte   Seabra             |    3|
-|Tiago Carmo   Nogueira              |    3|
-|Alane Marie   de Lima               |    2|
+<iframe src="C:/Users/ntu_c/metadata-article-ml/rpubs-interactive-graph/total_authors_connections_2013.html" width="100%" height="500"></iframe>
+<iframe src="C:/Users/ntu_c/metadata-article-ml/rpubs-interactive-graph/total_institution_connections_2013.html" width="100%" height="500"></iframe>
 
-### Instituições
+#### Relations between authors and institutions in 2018
 
+<iframe src="C:/Users/ntu_c/metadata-article-ml/rpubs-interactive-graph/total_authors_connections_2018.html" width="100%" height="500"></iframe>
+<iframe src="C:/Users/ntu_c/metadata-article-ml/rpubs-interactive-graph/total_institution_connections_2018.html" width="100%" height="500"></iframe>
+
+#### Relations between authors and institutions in 2023
+
+<iframe src="C:/Users/ntu_c/metadata-article-ml/rpubs-interactive-graph/total_authors_connections_2023.html" width="100%" height="500"></iframe>
+<iframe src="C:/Users/ntu_c/metadata-article-ml/rpubs-interactive-graph/total_institution_connections_2023.html" width="100%" height="500"></iframe>
+
+### 4.9 Which authors and institutions are the ones with most articles rejected?
+
+#### Authors
+
+|Autores                               |Institution                                          | Frec|
+|:-------------------------------------|:----------------------------------------------------|----:|
+|Flávia Gonçalves   Fernandes          |Universidade Federal de Goiás - UFG                  |    4|
+|Carla Diacui Medeiros   Berkenbrock   |UDESC                                                |    3|
+|Mohanad                               |Al-hikma University                                  |    3|
+|Naidson Clayr   Santos Ferreira       |Instituto Federal de Educação, Ciência e Tecnologia  |    3|
+|Alexandra Katiuska Ramos   Diaz       |Universidade de São Paulo                            |    2|
+|Almir Pereira   Guimarães             |Federal University of Alagoas                        |    2|
+|Aloysio Augusto Rabello de   Carvalho |Universidade Federal de São Paulo                    |    2|
+|Ana   Cervigni                        |Centro de Tecnologia da Informação Renato Archer-CTI |    2|
+|Beatriz Terezinha   Borsoi            |Universidade Tecnológica Federal do Paraná           |    2|
+|Bharti   Bisht                        |MRIIRS                                               |    2|
+
+#### Institutions
 
 |Instituciones                               | Frec|
 |:-------------------------------------------|----:|
@@ -364,44 +510,44 @@ P.s: analise feita apenas com base nos metadados registrados
 |UTFPR                                       |    5|
 
 
-##Em quais temas se encaixam os assuntos rejeitados e como estes variam ao longo dos anos?
+### 4.10 How different was the keywords of the rejected articles compared to the accpeted ones?
 
-P.s: modificar teste para fazer Rejeitados x Aceitos
+#### Areas and Sub-areas of study observed in 2023
 
-### Areas of study observed in 2023
+![Areas of study - 2023](C:/Users/ntu_c/metadata-article-ml/rpubs-images/area-rech-x-acceptos-2023.png)
+![Subareas of study - 2023](C:/Users/ntu_c/metadata-article-ml/rpubs-images/subareas-rech-x-acceptos-2023.png)
 
-![Areas of study - 2023](/cloud/project/rpubs-images/areas_rechazados_2023.png)
+#### Areas and Sub-areas of study observed in 2018
 
-### Sub-areas of study observed in 2023
+![Areas of study - 2023](C:/Users/ntu_c/metadata-article-ml/rpubs-images/area-rech-x-acceptos-2018.png)
+![Subareas of study - 2023](C:/Users/ntu_c/metadata-article-ml/rpubs-images/subareas-rech-x-acceptos-2018.png)
 
-![Subareas of study - 2023](/cloud/project/rpubs-images/subareas_rechazados_2023.png)
+#### Areas and Sub-areas of study observed in 2013
+
+![Areas of study - 2023](C:/Users/ntu_c/metadata-article-ml/rpubs-images/area-rech-x-acceptos-2013.png)
+![Subareas of study - 2023](C:/Users/ntu_c/metadata-article-ml/rpubs-images/subareas-rech-x-acceptos-2013.png)
+
+#### Areas and Sub-areas of study observed in 2008
+
+![Areas of study - 2023](C:/Users/ntu_c/metadata-article-ml/rpubs-images/area-rech-x-acceptos-2008.png)
+![Subareas of study - 2023](C:/Users/ntu_c/metadata-article-ml/rpubs-images/subareas-rech-x-acceptos-2008.png)
+
+# References
+
+[Villalobos, M. (n.d.). *Rita: Exploratory Analysis and Visualization of Text*. Retrieved June 23, 2024](https://rpubs.com/mvillalobos/Rita)
+
+[Barik, Nilaranjan, and Puspanjali Jena. 2019. “Bibliometric Portrait of Select Open Access Journals in the Field of Library and Information Science: A Scopus Based Analysis.” Library Philosophy and Practice 1: 1–8.](#)
+
+[Das, Saumen, Kiran Kaur, and Manoj Kumar Verma. 2021. “Publication and Collaboration Pattern of College and Research Libraries Journal During 2009-2018: A Scientometric Analysis.” Library Philosophy and Practice 5118.](#)
+
+[Gupta, Simran, and Nabi Hasan. 2018. “Scientometric Analysis of Metamorphosis: A Journal of Management Research.” DESIDOC Journal of Library & Information Technology 38 (4): 254–58. https://doi.org/10.14429/djlit.38.4.12511.](https://doi.org/10.14429/djlit.38.4.12511)
+
+[Kulkanjanapiban, Pachisa, and Tipawan Silwattananusarn. 2021. “Bibliometric Analysis of Publications in the Scopus Database: A Study at Prince of Songkla University (PSU) During 1978-2021.” Library Philosophy and Practice 125: 23001.](#)
+
+[Kumar, R. Santha, and K. Kaliyaperumal. 2015. “Scientometric Analysis of Global Publication Output in Mobile Technology.” DESIDOC Journal of Library and Information Technology 35 (4): 287–92. https://doi.org/10.14429/djlit.35.4.7884.](https://doi.org/10.14429/djlit.35.4.7884)
+
+[Rathika, N., and S. Thanuskodi. 2021. “Studies on Relative Growth Rate and Doubling Time of Publications Productivity of Nuclear Medicine Research.” Journal of Pharmaceutical Research International, 198–211. https://doi.org/10.9734/jpri/2021/v33i32a31732.](https://doi.org/10.9734/jpri/2021/v33i32a31732)
+
+[Savanur, Kiran, and R. Srikanth. 2009. “Modified Collaborative Coefficient: A New Measure for Quantifying the Degree of Research Collaboration.” Scientometrics 84 (2): 365–71. https://doi.org/10.1007/s11192-009-0100-4.](https://doi.org/10.1007/s11192-009-0100-4)
 
 
-
-### Areas of study observed in 2018
-
-![Areas of study - 2018](/cloud/project/rpubs-images/areas_rechazados_2018.png)
-
-### Sub-areas of study observed in 2018
-
-![Subareas of study - 2018](/cloud/project/rpubs-images/subareas_rechazados_2018.png)
-
-
-
-### Areas of study observed in 2013
-
-![Areas of study - 2013](/cloud/project/rpubs-images/areas_rechazados_2013.png)
-
-### Sub-areas of study observed in 2013
-
-![Subareas of study - 2013](/cloud/project/rpubs-images/subareas_rechazados_2013.png)
-
-
-
-### Areas of study observed in 2008
-
-![Areas of study - 2008](/cloud/project/rpubs-images/areas_rechazados_2008.png)
-
-### Sub-areas of study observed in 2008
-
-![Subareas of study - 2008](/cloud/project/rpubs-images/subareas_rechazados_2008.png)

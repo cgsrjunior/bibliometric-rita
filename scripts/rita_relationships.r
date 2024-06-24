@@ -1,9 +1,10 @@
 library("dplyr")   #Ordenamiento de datos
 library(knitr)
 library(lubridate)
+library(magrittr)
 
-#datos = read.csv("/cloud/project/dataset/BD_RITA_ACCEPTADOS.csv",sep=",",header=T)
-datos = read.csv("/cloud/project/dataset/BD_RITA_RECHAZADOS.csv",sep=";",header=T)
+datos = read.csv("C:/Users/ntu_c/metadata-article-ml/dataset/BD_RITA_ACCEPTADOS.csv",sep=",",header=T)
+#datos = read.csv("C:/Users/ntu_c/metadata-article-ml/dataset/BD_RITA_RECHAZADOS.csv",sep=";",header=T)
 
 datos=datos[which(datos$institution!=""),]
 
@@ -12,21 +13,25 @@ datos=datos[which(datos$institution!=""),]
 #=========================================================================================================
 
 #Filtro por año. También debe incluir la opción ALL
-ano="2023"
-acumulado = T
+ano="2008"
+acumulado = F
 
 # First start with authors
 
 if (acumulado==F) {datos=datos[which(datos$year==ano),]} else
 {datos=datos[which(datos$year<=ano),]} 
 
-autores=data.frame(table(datos$authors))
-autores=autores[order(autores$Freq,decreasing = T),]
+# Agrupar por instituição e autor, e contar as ocorrências
+autores = datos %>%
+  group_by(authors, institution) %>%
+  summarise(count = n())
+
+autores=autores[order(autores$count,decreasing = T),]
 rownames(autores)=NULL
-names(autores)=c("Autores","Frec")
+names(autores)=c("Autores","Institution","Frec")
 
 top_10_authors = knitr::kable(head(autores,10))
-print(top_10_authors)
+#print(top_10_authors)
 
 # Authors graph
 
@@ -58,7 +63,7 @@ rownames(instituciones)=NULL
 names(instituciones)=c("Instituciones","Frec")
 
 top_10_institutions_by_freq = knitr::kable(head(instituciones,10))
-print(top_10_institutions_by_freq)
+# print(top_10_institutions_by_freq)
 
 
 # Graph institutions
@@ -76,7 +81,7 @@ matriz_institution[idx,idx]=matriz_institution[idx,idx]+1
 for (a in 1:length(norm_institution))
 {matriz_institution[a,a]=0}
 
-g1 = graph_from_adjacency_matrix(matriz_institution,weighted=T,mode="directed")
+g2 = graph_from_adjacency_matrix(matriz_institution,weighted=T,mode="directed")
 
-simpleNetwork(as_data_frame(g1),zoom=T,linkDistance = 30)
+simpleNetwork(as_data_frame(g2),zoom=T,linkDistance = 30)
 

@@ -5,7 +5,7 @@ library(lubridate)
 
 
 # Remember to change this for the next 
-datos = read.csv("/cloud/project/dataset/BD_RITA02.csv",sep=",",header=T)
+datos = read.csv("C:/Users/ntu_c/metadata-article-ml/dataset/BD_RITA02.csv",sep=",",header=T)
 
 paleta = "Reds" #"Blues" "Zissou" "GrandBudapest"
 
@@ -49,3 +49,21 @@ g=ggplot(data=datos_tmp, aes(x=Year, y=n.., fill=Language)) +
   scale_fill_brewer(palette=paleta) + ggtitle("Submissions by year according to their language")
 
 ggplotly(g)
+
+
+# Agrupar por ano e somar os counts
+datos_tmp <- datos_tmp %>%
+  group_by(Year) %>%
+  summarise(
+    Total_de_artigos = sum(n..),
+    n_en_US = sum(ifelse(Language == "en_US", n.., 0)),
+    n_es_ES = sum(ifelse(Language == "es_ES", n.., 0)),
+    n_pt_BR = sum(ifelse(Language == "pt_BR", n.., 0)),
+    n_pt_PT = sum(ifelse(Language == "pt_PT", n.., 0)),
+  )
+
+# Renomear colunas se necessário
+colnames(datos_tmp) <- c("Year", "Total articles", "en_US", "es_ES", "pt_BR", "pt_PT")
+
+# Gerar tabela Markdown com os top 10 areas mais vistas
+table_ranked_area <- kable(datos_tmp, caption = "Number of articles by language", align = "c", row.names = FALSE)

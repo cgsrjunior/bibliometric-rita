@@ -8,7 +8,7 @@ library(scales)  # Para usar a função comma()
 paleta = "Blues" #"Blues" "Zissou" "GrandBudapest"
 
 # Remember to change this for the next 
-datos = read.csv("/cloud/project/dataset/BD_RITA_ACCEPTADOS.csv",sep=",",header=T)
+datos = read.csv("C:/Users/ntu_c/metadata-article-ml/dataset/BD_RITA_ACCEPTADOS.csv",sep=",",header=T)
 
 #Using distinct ID to gather only the absolute number of visualization each year
 datos_tmp = distinct(datos, title, .keep_all = TRUE)
@@ -20,10 +20,10 @@ articles_view_ranked <- datos_tmp %>%
 
 
 # Selecionar os top 10 documentos mais visitados
-top_n_docs <- head(articles_view_ranked, 20)
+top_n_docs <- head(articles_view_ranked, 10)
 
 # Selecionar apenas as colunas de interesse
-top_n_docs <- top_n_docs[, c("authors", "title", "Views", "year")]
+top_n_docs <- top_n_docs[, c("authors", "title", "institution", "Views", "year")]
 
 colnames(top_n_docs)[1] <- "author"
 
