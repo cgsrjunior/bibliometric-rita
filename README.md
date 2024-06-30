@@ -79,6 +79,25 @@ A briefly overview of each step:
 
 <iframe src="C:/Users/ntu_c/metadata-article-ml/rpubs-interactive-graph/publications_year.html" width="100%" height="500"></iframe>
 
+| Year | Total articles | Published | Declined | Review | Submission | Copyediting | Production |
+|:----:|:--------------:|:---------:|:--------:|:------:|:----------:|:-----------:|:----------:|
+| 2008 |       48       |    41     |    7     |   0    |     0      |      0      |     0      |
+| 2009 |       66       |    28     |    38    |   0    |     0      |      0      |     0      |
+| 2010 |       69       |    38     |    31    |   0    |     0      |      0      |     0      |
+| 2011 |       48       |    10     |    38    |   0    |     0      |      0      |     0      |
+| 2012 |       76       |    20     |    56    |   0    |     0      |      0      |     0      |
+| 2013 |       48       |    14     |    34    |   0    |     0      |      0      |     0      |
+| 2014 |       56       |    13     |    43    |   0    |     0      |      0      |     0      |
+| 2015 |       67       |    20     |    47    |   0    |     0      |      0      |     0      |
+| 2016 |       54       |     9     |    45    |   0    |     0      |      0      |     0      |
+| 2017 |       61       |    18     |    43    |   0    |     0      |      0      |     0      |
+| 2018 |      114       |    30     |    84    |   0    |     0      |      0      |     0      |
+| 2019 |       68       |    24     |    44    |   0    |     0      |      0      |     0      |
+| 2020 |       48       |    22     |    26    |   0    |     0      |      0      |     0      |
+| 2021 |       50       |    15     |    35    |   0    |     0      |      0      |     0      |
+| 2022 |       44       |    13     |    31    |   0    |     0      |      0      |     0      |
+| 2023 |       53       |     4     |    32    |   13   |     2      |      1      |     1      |
+
 #### Looking only for accepted and rejected results
 
 <iframe src="C:/Users/ntu_c/metadata-article-ml/rpubs-interactive-graph/pub_year_accept_declined.html" width="100%" height="500"></iframe>
@@ -114,7 +133,7 @@ A briefly overview of each step:
 | 2011 |       48       |   0   |   0   |  48   |   0   |
 | 2012 |       76       |   0   |   0   |  76   |   0   |
 | 2013 |       48       |   4   |   0   |  44   |   0   |
-| 2014 |       56       |  14   |   1   |  40   |   1   |
+| 2014 |       55       |  14   |   1   |  40   |   0   |
 | 2015 |       67       |   6   |   0   |  61   |   0   |
 | 2016 |       54       |   4   |   0   |  49   |   1   |
 | 2017 |       61       |  13   |   0   |  47   |   1   |
@@ -123,7 +142,7 @@ A briefly overview of each step:
 | 2020 |       48       |  48   |   0   |   0   |   0   |
 | 2021 |       50       |  50   |   0   |   0   |   0   |
 | 2022 |       44       |  44   |   0   |   0   |   0   |
-| 2023 |       53       |  53   |   0   |   0   |   0   |
+| 2023 |       36       |  36   |   0   |   0   |   0   |
 
 Since we have a lower number of articles published related to 2023, we attained to use data until 2022 for some analysis to ensure that we have the significant large scope of dataset for each year
 
