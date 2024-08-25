@@ -60,7 +60,7 @@ areas_unicas <- unique(kw_datos2$area)
 kw_area <- data.frame(area = areas_unicas, views = 0)
 
 #Filtro por año. También debe incluir la opción ALL
-ano="2008"
+ano="2023"
 acumulado = F
 
 # Filter per year

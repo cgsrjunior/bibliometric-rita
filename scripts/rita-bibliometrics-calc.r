@@ -4,7 +4,12 @@ library(lubridate)
 
 
 # Remember to change this for the next 
-datos = read.csv("/cloud/project/dataset/BD_RITA_ACCEPTADOS.csv",sep=",",header=T)
+datos = read.csv("C:/Users/ntu_c/metadata-article-ml/dataset/BD_RITA_ACCEPTADOS.csv",sep=",",header=T)
+
+# Supondo que seus dados estejam armazenados em uma data frame chamada datos_tmp
+datos <- datos %>%
+  distinct(doc, .keep_all = TRUE)
+
 
 #Filtro de artículos publicados
 datos_tmp=data.frame(table(datos$year))
@@ -39,7 +44,7 @@ datos_tmp$DT[1]=0
 bibliometrics_calculated_table = knitr::kable(datos_tmp[,c(1:7)])
 
 # Caminho do arquivo para salvar a tabela
-caminho_arquivo <- "/cloud/project/rpubs-images/bibliometrics_calculated_table.md"
+caminho_arquivo <- "C:/Users/ntu_c/metadata-article-ml/rpubs-images/bibliometrics_calculated_table.md"
 # Escrever o conteúdo da tabela no arquivo
 writeLines(as.character(bibliometrics_calculated_table), caminho_arquivo)
 # Mensagem de confirmação
@@ -144,7 +149,8 @@ for (a in 1:length(anos))
 datos_tmp$MCC = MCC
 
 
-datos = read.csv("/cloud/project/dataset/BD_RITA_ACCEPTADOS.csv",sep=",",header=T)
+datos = read.csv("C:/Users/ntu_c/metadata-article-ml/dataset/BD_RITA_ACCEPTADOS.csv",sep=",",header=T)
+
 anos = unique(datos$year)
 PNA = rep(0,length(anos))
 for (a in 1:length(anos))

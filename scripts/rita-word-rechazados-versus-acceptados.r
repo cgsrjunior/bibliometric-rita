@@ -7,6 +7,7 @@ library("quanteda.textstats")
 library("quanteda.textplots")
 library("stringr")
 library("lubridate")
+library("ggplot2")
 
 #Lectura de datos
 #Datos originales
@@ -79,7 +80,7 @@ dfmat_acceptos_the = dfm(toks_acceptos_the)
 #=========================================================================================================
 
 # Defina o ano de interesse
-ano <- "2023"
+ano <- "2008"
 
 # Filtrar documentos por ano
 dfmat_acceptos_the_year <- dfm_subset(dfmat_acceptos_the, docvars(dfmat_acceptos_the, "year") == ano)
@@ -111,7 +112,7 @@ tstat_key_year <- textstat_keyness(dfmat_combined_year, target = target_vector_y
 print(tstat_key_year)
 #Graficar
 grafico_sub_areas=textplot_keyness(tstat_key_year,labelsize = 4,n=10,margin = 0.6,
-                                   color = c("red", "blue"))
+                                   color = c("mediumaquamarine", "gray"))
 
 
 #Areas
@@ -166,7 +167,6 @@ tstat_key_year <- textstat_keyness(dfmat_combined_year, target = target_vector_y
 # Visualizar os resultados
 print(tstat_key_year)
 
+
 grafico_areas=textplot_keyness(tstat_key_year,labelsize = 4,n=10,margin = 0.6, 
-                               color = c("red", "blue"))
-
-
+                               color = c("mediumaquamarine", "gray"))

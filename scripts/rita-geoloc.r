@@ -3,7 +3,7 @@ library(leaflet)
 library(sf)
 library(geosphere)
 
-datos=read.csv("/cloud/project/dataset/BD_RITA05.csv", sep=",",header = T)
+datos=read.csv("C:/Users/ntu_c/metadata-article-ml/dataset/BD_RITA05.csv", sep=",",header = T)
 
 
 if (length(which(datos$city=="-")>0))

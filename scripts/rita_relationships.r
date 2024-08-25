@@ -2,6 +2,8 @@ library("dplyr")   #Ordenamiento de datos
 library(knitr)
 library(lubridate)
 library(magrittr)
+library(igraph)
+library(networkD3)
 
 datos = read.csv("C:/Users/ntu_c/metadata-article-ml/dataset/BD_RITA_ACCEPTADOS.csv",sep=",",header=T)
 #datos = read.csv("C:/Users/ntu_c/metadata-article-ml/dataset/BD_RITA_RECHAZADOS.csv",sep=";",header=T)
@@ -13,8 +15,8 @@ datos=datos[which(datos$institution!=""),]
 #=========================================================================================================
 
 #Filtro por año. También debe incluir la opción ALL
-ano="2008"
-acumulado = F
+ano="2023"
+acumulado = T
 
 # First start with authors
 
@@ -83,5 +85,6 @@ for (a in 1:length(norm_institution))
 
 g2 = graph_from_adjacency_matrix(matriz_institution,weighted=T,mode="directed")
 
-simpleNetwork(as_data_frame(g2),zoom=T,linkDistance = 30)
+layout <- layout_with_fr(g2)  # Use um algoritmo de layout, como Force-Directed
+simpleNetwork(as_data_frame(g2), zoom = T, linkDistance = 50, fontSize = 16)
 

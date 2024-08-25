@@ -8,7 +8,7 @@ library(lubridate)
 # Remember to change this for the next 
 datos = read.csv("C:/Users/ntu_c/metadata-article-ml/dataset/BD_RITA02.csv",sep=",",header=T)
 
-paleta = "Reds" #"Blues" "Zissou" "GrandBudapest"
+paleta = "aquamarine" #"Blues" "Zissou" "GrandBudapest"
 
 #==========================================
 #  Shiny - Selección  - Esto se debe controlar con shiny
